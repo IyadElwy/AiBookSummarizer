@@ -61,19 +61,19 @@
                     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
                 },
                 "restoreTerminals.terminals": [
-                    //     {
-                    //         "splitTerminals": [
-                    //             {
-                    //                 "name": "free_roam",
-                    //                 "commands": [
-                    //                     "cd backend",
-                    //                     "uv pip install -e .",
-                    //                     "uv pip install -r pyproject.toml",
-                    //                     "source .venv/bin/activate"
-                    //                 ]
-                    //             }
-                    //         ]
-                    //     },
+                    {
+                        "splitTerminals": [
+                            {
+                                "name": "free_roam",
+                                "commands": [
+                                    "cd backend",
+                                    "uv pip install -e .",
+                                    "uv pip install -r pyproject.toml",
+                                    "source .venv/bin/activate"
+                                ]
+                            }
+                        ]
+                    },
                     //     {
                     //         "splitTerminals": [
                     //             {

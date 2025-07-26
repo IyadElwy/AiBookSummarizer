@@ -10,6 +10,16 @@ export default async function App() {
     redirect('/auth/login');
   }
 
+  const accessToken = (await auth0.getAccessToken()).token;
+  const response = await fetch('http://localhost:5004', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+
 
   return (
     <>

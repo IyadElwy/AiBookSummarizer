@@ -30,6 +30,7 @@ export default function ClientNavbar({ session }) {
                             color="secondary"
                             name={session.user.name}
                             size="sm"
+                            src={session.user.picture || none}
                         />
                     </DropdownTrigger>
                     <DropdownMenu aria-label="Profile Actions" variant="flat">
