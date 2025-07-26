@@ -1,0 +1,201 @@
+{
+    "name": "EKZ Dev Container",
+    "dockerComposeFile": "../docker-compose.yaml",
+    "service": "dev-container",
+    "workspaceFolder": "/EKZ",
+    "forwardPorts": [
+        3000
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "charliermarsh.ruff",
+                "kevinrose.vsc-python-indent",
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.debugpy",
+                "njpwerner.autodocstring",
+                "mikestead.dotenv",
+                "dbaeumer.vscode-eslint",
+                "redhat.vscode-yaml",
+                "christian-kohler.path-intellisense",
+                "christian-kohler.npm-intellisense",
+                "codezombiech.gitignore",
+                "formulahendry.auto-close-tag",
+                "formulahendry.auto-rename-tag",
+                "yzhang.markdown-all-in-one",
+                "dsznajder.es7-react-js-snippets",
+                "bradlc.vscode-tailwindcss",
+                "davidanson.vscode-markdownlint",
+                "mgmcdermott.vscode-language-babel",
+                "xabikos.javascriptsnippets",
+                "ecmel.vscode-html-css",
+                "tamasfe.even-better-toml",
+                "ms-azuretools.vscode-docker",
+                "ms-kubernetes-tools.vscode-kubernetes-tools",
+                "gruntfuggly.todo-tree",
+                "clemenspeters.format-json",
+                "EthanSK.restore-terminals"
+            ],
+            "settings": {
+                "[python]": {
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.fixAll": "always",
+                        "source.organizeImports": "always"
+                    },
+                    "editor.defaultFormatter": "charliermarsh.ruff"
+                },
+                "[javascript]": {
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.fixAll.eslint": "always"
+                    },
+                    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+                },
+                "[javascriptreact]": {
+                    "editor.formatOnSave": true,
+                    "editor.codeActionsOnSave": {
+                        "source.fixAll.eslint": "always"
+                    },
+                    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+                },
+                "restoreTerminals.terminals": [
+                    //     {
+                    //         "splitTerminals": [
+                    //             {
+                    //                 "name": "free_roam",
+                    //                 "commands": [
+                    //                     "cd backend",
+                    //                     "uv pip install -e .",
+                    //                     "uv pip install -r pyproject.toml",
+                    //                     "source .venv/bin/activate"
+                    //                 ]
+                    //             }
+                    //         ]
+                    //     },
+                    //     {
+                    //         "splitTerminals": [
+                    //             {
+                    //                 "name": "psql",
+                    //                 "commands": [
+                    //                     "cd backend",
+                    //                     "PGPASSWORD=admin psql -h postgres -U admin -d takween_db"
+                    //                 ]
+                    //             }
+                    //         ]
+                    //     },
+                    {
+                        "splitTerminals": [
+                            {
+                                "name": "frontend",
+                                "commands": [
+                                    "cd frontend",
+                                    "npm run dev"
+                                ]
+                            }
+                        ]
+                    },
+                    //     {
+                    //         "splitTerminals": [
+                    //             {
+                    //                 "name": "auth",
+                    //                 "commands": [
+                    //                     "cd backend",
+                    //                     "uv pip install -e .",
+                    //                     "uv pip install -r pyproject.toml",
+                    //                     "source .venv/bin/activate",
+                    //                     "python3 services/auth/run.py"
+                    //                 ]
+                    //             }
+                    //         ]
+                    //     },
+                    //     {
+                    //         "splitTerminals": [
+                    //             {
+                    //                 "name": "data",
+                    //                 "commands": [
+                    //                     "cd backend",
+                    //                     "uv pip install -e .",
+                    //                     "uv pip install -r pyproject.toml",
+                    //                     "source .venv/bin/activate",
+                    //                     "python3 services/data/run.py"
+                    //                 ]
+                    //             }
+                    //         ]
+                    //     },
+                    //     {
+                    //         "splitTerminals": [
+                    //             {
+                    //                 "name": "jobs",
+                    //                 "commands": [
+                    //                     "cd backend",
+                    //                     "uv pip install -e .",
+                    //                     "uv pip install -r pyproject.toml",
+                    //                     "source .venv/bin/activate",
+                    //                     "python3 services/jobs/run.py"
+                    //                 ]
+                    //             }
+                    //         ]
+                    //     },
+                    //     {
+                    //         "splitTerminals": [
+                    //             {
+                    //                 "name": "projects",
+                    //                 "commands": [
+                    //                     "cd backend",
+                    //                     "uv pip install -e .",
+                    //                     "uv pip install -r pyproject.toml",
+                    //                     "source .venv/bin/activate",
+                    //                     "python3 services/projects/run.py"
+                    //                 ]
+                    //             }
+                    //         ]
+                    //     },
+                    //     {
+                    //         "splitTerminals": [
+                    //             {
+                    //                 "name": "users",
+                    //                 "commands": [
+                    //                     "cd backend",
+                    //                     "uv pip install -e .",
+                    //                     "uv pip install -r pyproject.toml",
+                    //                     "source .venv/bin/activate",
+                    //                     "python3 services/users/run.py"
+                    //                 ]
+                    //             }
+                    //         ]
+                    //     },
+                    //     {
+                    //         "splitTerminals": [
+                    //             {
+                    //                 "name": "webhooks",
+                    //                 "commands": [
+                    //                     "cd backend",
+                    //                     "uv pip install -e .",
+                    //                     "uv pip install -r pyproject.toml",
+                    //                     "source .venv/bin/activate",
+                    //                     "python3 services/webhooks/run.py"
+                    //                 ]
+                    //             }
+                    //         ]
+                    //     },
+                    //     {
+                    //         "splitTerminals": [
+                    //             {
+                    //                 "name": "data_engine",
+                    //                 "commands": [
+                    //                     "cd backend",
+                    //                     "uv pip install -e .",
+                    //                     "uv pip install -r pyproject.toml",
+                    //                     "source .venv/bin/activate",
+                    //                     "python3 services/data_engine/run.py"
+                    //                 ]
+                    //             }
+                    //         ]
+                    //     }
+                ]
+            }
+        }
+    }
+}
