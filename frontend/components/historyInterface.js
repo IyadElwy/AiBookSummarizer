@@ -12,6 +12,17 @@ import {
     ChevronDown, ChevronUp, Search, Filter
 } from 'lucide-react';
 
+
+
+const languages = {
+    'en': 'English',
+    'de': 'Deutsch',
+    'fr': 'Français',
+    'es': 'Español',
+    'it': 'Italiano' 
+};
+
+
 // Mock data for book history
 const mockBookHistory = [
     {
@@ -216,14 +227,14 @@ const mockBookHistory = [
 
 const ITEMS_PER_PAGE = 5;
 
-export default function BookHistoryTable({ session }) {
+export default function BookHistoryTable({ session, summary_history_data }) {
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedBook, setSelectedBook] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const totalPages = Math.ceil(mockBookHistory.length / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(summary_history_data.length / ITEMS_PER_PAGE);
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const currentItems = mockBookHistory.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+    const currentItems = summary_history_data.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
     const getConfidenceColor = (score) => {
         if (score >= 90) return 'success';
@@ -303,7 +314,7 @@ export default function BookHistoryTable({ session }) {
                                         <TableCell>
                                             <div className="space-y-1">
                                                 <p className="font-semibold text-white">{book.title}</p>
-                                                <p className="text-sm text-gray-400">by {book.author}</p>
+                                                <p className="text-sm text-gray-400">by {book.authors.join(", ")}</p>
                                                 <p className="text-xs text-gray-500">ISBN: {book.isbn}</p>
                                             </div>
                                         </TableCell>
@@ -319,23 +330,23 @@ export default function BookHistoryTable({ session }) {
                                                 </Chip>
                                                 <div className="flex items-center gap-1">
                                                     <Globe className="w-3 h-3 text-gray-400" />
-                                                    <span className="text-xs text-gray-400">{book.language}</span>
+                                                    <span className="text-xs text-gray-400">{languages[book.language]}</span>
                                                 </div>
                                             </div>
                                         </TableCell>
                                         <TableCell>
                                             <div className="space-y-2">
                                                 <Chip
-                                                    color={getConfidenceColor(book.confidenceScore)}
+                                                    color={getConfidenceColor(book.medium_confidence)}
                                                     variant="flat"
                                                     size="sm"
                                                     startContent={<Shield className="w-3 h-3" />}
                                                 >
-                                                    {getConfidenceLabel(book.confidenceScore)} ({book.confidenceScore}%)
+                                                    {getConfidenceLabel(book.medium_confidence)} ({book.medium_confidence}%)
                                                 </Chip>
                                                 <Progress
-                                                    value={book.confidenceScore}
-                                                    color={getConfidenceColor(book.confidenceScore)}
+                                                    value={book.medium_confidence}
+                                                    color={getConfidenceColor(book.medium_confidence)}
                                                     size="sm"
                                                     className="w-16"
                                                 />
@@ -345,9 +356,8 @@ export default function BookHistoryTable({ session }) {
                                             <div className="space-y-1">
                                                 <div className="flex items-center gap-1">
                                                     <Calendar className="w-3 h-3 text-gray-400" />
-                                                    <span className="text-sm">{formatDate(book.dateProcessed)}</span>
+                                                    <span className="text-sm">{formatDate(book.creation_date)}</span>
                                                 </div>
-                                                <p className="text-xs text-gray-500">{book.processingTime}</p>
                                             </div>
                                         </TableCell>
                                         <TableCell>
@@ -374,11 +384,6 @@ export default function BookHistoryTable({ session }) {
                         total={totalPages}
                         page={currentPage}
                         onChange={setCurrentPage}
-                        classNames={{
-                            wrapper: "gap-0 overflow-visible h-8 rounded border border-divider",
-                            item: "w-8 h-8 text-small rounded-none bg-transparent",
-                            cursor: "bg-blue-600 text-white font-bold"
-                        }}
                     />
                 </div>
 
@@ -403,15 +408,15 @@ export default function BookHistoryTable({ session }) {
                                     <div className="flex items-center justify-between w-full">
                                         <div>
                                             <h3 className="text-xl font-bold text-white">{selectedBook?.title}</h3>
-                                            <p className="text-gray-400">by {selectedBook?.author}</p>
+                                            <p className="text-gray-400">by {selectedBook?.authors.join(", ")}</p>
                                         </div>
                                         <Chip
-                                            color={getConfidenceColor(selectedBook?.confidenceScore)}
+                                            color={getConfidenceColor(selectedBook?.medium_confidence)}
                                             variant="flat"
                                             size="lg"
                                             startContent={<Shield className="w-4 h-4" />}
                                         >
-                                            {getConfidenceLabel(selectedBook?.confidenceScore)} ({selectedBook?.confidenceScore}%)
+                                            {getConfidenceLabel(selectedBook?.medium_confidence)} ({selectedBook?.medium_confidence}%)
                                         </Chip>
                                     </div>
                                 </ModalHeader>
@@ -432,11 +437,7 @@ export default function BookHistoryTable({ session }) {
                                                 </div>
                                                 <div>
                                                     <p className="text-gray-400 text-sm">Language</p>
-                                                    <p className="text-white">{selectedBook.language}</p>
-                                                </div>
-                                                <div>
-                                                    <p className="text-gray-400 text-sm">Processing Time</p>
-                                                    <p className="text-white">{selectedBook.processingTime}</p>
+                                                    <p className="text-white">{languages[selectedBook.language]}</p>
                                                 </div>
                                             </div>
 
@@ -453,25 +454,25 @@ export default function BookHistoryTable({ session }) {
                                                     <div className="space-y-2">
                                                         <div className="flex justify-between">
                                                             <span className="text-gray-300 text-sm">Source Reliability</span>
-                                                            <span className="text-white text-sm">{selectedBook.confidenceMetrics.sourceReliability}%</span>
+                                                            <span className="text-white text-sm">{selectedBook.source_reliability}%</span>
                                                         </div>
-                                                        <Progress value={selectedBook.confidenceMetrics.sourceReliability} color="success" size="sm" />
+                                                        <Progress value={selectedBook.source_reliability} color="success" size="sm" />
                                                     </div>
 
                                                     <div className="space-y-2">
                                                         <div className="flex justify-between">
                                                             <span className="text-gray-300 text-sm">Content Coverage</span>
-                                                            <span className="text-white text-sm">{selectedBook.confidenceMetrics.contentCoverage}%</span>
+                                                            <span className="text-white text-sm">{selectedBook.content_coverage}%</span>
                                                         </div>
-                                                        <Progress value={selectedBook.confidenceMetrics.contentCoverage} color="warning" size="sm" />
+                                                        <Progress value={selectedBook.content_coverage} color="warning" size="sm" />
                                                     </div>
 
                                                     <div className="space-y-2">
                                                         <div className="flex justify-between">
                                                             <span className="text-gray-300 text-sm">Cross-Reference</span>
-                                                            <span className="text-white text-sm">{selectedBook.confidenceMetrics.crossReference}%</span>
+                                                            <span className="text-white text-sm">{selectedBook.cross_reference}%</span>
                                                         </div>
-                                                        <Progress value={selectedBook.confidenceMetrics.crossReference} color="primary" size="sm" />
+                                                        <Progress value={selectedBook.cross_reference} color="primary" size="sm" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -482,7 +483,7 @@ export default function BookHistoryTable({ session }) {
                                             <div className="space-y-4">
                                                 <h4 className="text-lg font-semibold text-white">AI Generated Summary</h4>
                                                 <div className="bg-gray-700 p-4 rounded-lg">
-                                                    <p className="text-gray-300 leading-relaxed">{selectedBook.summary}</p>
+                                                    <p className="text-gray-300 leading-relaxed">{selectedBook.generated_summary}</p>
                                                 </div>
                                             </div>
 
@@ -501,7 +502,8 @@ export default function BookHistoryTable({ session }) {
                                                                 <div className="w-2 h-2 rounded-full bg-blue-400"></div>
                                                                 <div>
                                                                     <p className="text-white font-medium">{source.type}</p>
-                                                                    <p className="text-gray-400 text-sm">{source.count} sources analyzed</p>
+                                                                    <p className="text-gray-400 text-sm"><a href={source.url}>View Source</a></p>
+
                                                                 </div>
                                                             </div>
                                                             <Chip

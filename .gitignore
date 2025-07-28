@@ -49,3 +49,4 @@ __pycache__
 db.*
 backend/.venv
 EKZ.egg-info
+backend/.env

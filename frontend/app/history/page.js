@@ -11,22 +11,19 @@ export default async function App() {
     }
 
   const accessToken = (await auth0.getAccessToken()).token;
-  const response = await fetch('http://localhost:5004', {
+  const response = await fetch('http://localhost:5004/all', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
         'Content-Type': 'application/json'
       }
     });
-
-
-
-  
+    const initial_summary_history_data = await response.json();
 
     return (
         <>
             <ClientNavbar session={session} />
-            <BookHistoryTable session={session} />
+            <BookHistoryTable session={session} summary_history_data={initial_summary_history_data}/>
         </>
     );
 }
