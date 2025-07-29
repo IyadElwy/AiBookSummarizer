@@ -1,5 +1,6 @@
 import isbnlib
 
+from enums.main_server import Models
 from errors.exceptions import (
     ValidationException,
 )
@@ -10,7 +11,9 @@ def validate_summary_creation_body(isbn: str, language: str, model: str):
         raise ValidationException('Isbn not valid')
     if language not in ['en', 'de', 'fr', 'es', 'it']:
         raise ValidationException('Language not valid')
-    if model not in ['gpt4', 'claude', 'gemini']:
+    if model not in [member.name for member in Models]:
+        print(model)
+        print([member.name for member in Models])
         raise ValidationException('Model not valid')
 
 

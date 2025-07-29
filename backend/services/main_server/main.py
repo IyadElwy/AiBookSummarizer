@@ -6,7 +6,6 @@ import requests
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
 from jwt.algorithms import RSAAlgorithm
 from jwt.exceptions import PyJWTError
 from pymongo import MongoClient
@@ -47,9 +46,7 @@ config.mongodb_client = mongodb_client
 
 app = FastAPI()
 
-origins = [
-    'http://localhost:3000',
-]
+origins = ['*']
 
 app.add_middleware(
     CORSMiddleware,
@@ -62,8 +59,7 @@ app.add_middleware(
 
 @app.middleware('http')
 async def authenticate_user(request: Request, call_next):
-    if request.method == 'OPTIONS':
-        response = JSONResponse(content={}, status_code=200)
+    if request.method == 'OPTIONS' or request.url.path == '/api/health':
         return await call_next(request)
     auth_header = request.headers.get('Authorization')
     if auth_header:
@@ -99,4 +95,4 @@ async def config_middleware(request: Request, call_next):
     return await call_next(request)
 
 
-app.include_router(router)
+app.include_router(router, prefix='/api')

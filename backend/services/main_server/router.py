@@ -18,6 +18,11 @@ load_dotenv()
 router = APIRouter()
 
 
+@router.get('/health')
+async def health_check():
+    return {'status': 'healthy'}
+
+
 @router.get('/status/{task_id}')
 async def get_data_source(
     request: Request,

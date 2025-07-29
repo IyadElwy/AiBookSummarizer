@@ -50,3 +50,4 @@ db.*
 backend/.venv
 EKZ.egg-info
 backend/.env
+K8s/config/vke_kube_config.yaml

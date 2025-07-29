@@ -16,9 +16,12 @@ const languages = [
 ];
 
 const models = [
-    { key: 'gpt4', label: 'GPT-4 (Detailed)' },
-    { key: 'claude', label: 'Claude (Balanced)' },
-    { key: 'gemini', label: 'Gemini (Fast)' }
+    { key: 'mistral_latest__300', label: 'mistral:latest (300 characters)' },
+    { key: 'gemma3n_e2b__300', label: 'gemma3n:e2b (300 characters)' },
+    { key: 'llama3_1_latest__300', label: 'llama3.1:latest (300 characters)' },
+    { key: 'mistral_latest__1000', label: 'mistral:latest (1000 characters)' },
+    { key: 'gemma3n_e2b__1000', label: 'gemma3n:e2b (1000 characters)' },
+    { key: 'llama3_1_latest__1000', label: 'llama3.1:latest (1000 characters)' }
 ];
 
 const statusMapping = {
@@ -34,7 +37,7 @@ const statusMapping = {
 export default function BookSummaryInterface({ session }) {
     const [isbn, setIsbn] = useState('');
     const [language, setLanguage] = useState('en');
-    const [model, setModel] = useState('gpt4');
+    const [model, setModel] = useState('mistral_latest__300');
     const [error, setError] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -83,7 +86,7 @@ export default function BookSummaryInterface({ session }) {
 
             const accessToken = await getFreshAccessToken();
 
-            const response = await fetch('http://localhost:5004', {
+            const response = await fetch(process.env.NEXT_PUBLIC_MAIN_SERVER_BASE_URL, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
@@ -115,7 +118,7 @@ export default function BookSummaryInterface({ session }) {
         try {
             const accessToken = await getFreshAccessToken();
 
-            const response = await fetch(`http://localhost:5004/status/${taskId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_MAIN_SERVER_BASE_URL}/status/${taskId}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,

@@ -1,10 +1,13 @@
 import json
 import os
+import threading
+import time
 
 import pika
 import psycopg2
 from dotenv import load_dotenv
 from pymongo import MongoClient
+from utils import generate_book_summary
 
 from enums.main_server import Languages, Models, Status
 from models.postgres_metadata import Summary
@@ -49,14 +52,25 @@ def ai_summary_callback(ch, method, properties, body):
 
     # make request to ai summary engine
     language = Languages[summary_document['language']]
-    print(language.value)
     model = Models[summary_document['model']]
-    print(model.value)
     sources = summary_document['sources']
+    ollama_model_name, characters_size = Models.get_model_name_and_char(model)
+    try:
+        summary = generate_book_summary(
+            prompt='Please create a detailed book summary',
+            language=language.value,
+            character_size=int(characters_size),
+            input_data='---'.join([src['data'] for src in sources]),
+            model=ollama_model_name,
+            ollama_host=os.getenv('OLLAMA_HOST'),
+        )
+    except Exception:
+        Summary.update_status(conn, summary_job.id, Status.failed)
+        return
 
     # save summary and metrics to mongodb
     new_fields = {
-        'generated_summary': 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+        'generated_summary': summary,
     }
     collection.update_one({'metadata_id': summary_job.id}, {'$set': new_fields})
 
@@ -64,7 +78,31 @@ def ai_summary_callback(ch, method, properties, body):
     Summary.update_status(conn, summary_job.id, Status.completed)
 
 
+HEARTBEAT_FILE = '/tmp/worker_heartbeat'
+
+
+def update_heartbeat():
+    while True:
+        try:
+            with open(HEARTBEAT_FILE, 'w') as f:
+                f.write(str(int(time.time())))
+        except Exception:
+            pass
+        time.sleep(30)
+
+
 def main():
+    # Start heartbeat thread
+    heartbeat_thread = threading.Thread(target=update_heartbeat, daemon=True)
+    heartbeat_thread.start()
+
+    # Initial heartbeat
+    try:
+        with open(HEARTBEAT_FILE, 'w') as f:
+            f.write(str(int(time.time())))
+    except Exception:
+        pass
+
     channel = rabbitmq_client.channel()
     channel.queue_declare(queue='ai-summary')
     channel.basic_consume(queue='ai-summary', on_message_callback=ai_summary_callback, auto_ack=True)

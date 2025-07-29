@@ -11,7 +11,7 @@ export default async function App() {
     }
 
   const accessToken = (await auth0.getAccessToken()).token;
-  const response = await fetch('http://localhost:5004/all', {
+  const response = await fetch(`${process.env.MAIN_SERVER_BASE_URL}/all`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${accessToken}`,

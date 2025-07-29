@@ -1,0 +1,7 @@
+global:
+  defaultStorageClass: "vultr-block-storage"
+  storageClass: "vultr-block-storage"
+
+persistence:
+  storageClass: "vultr-block-storage"
+  size: 10Gi

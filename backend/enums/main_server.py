@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from enum import Enum
 
 
@@ -19,6 +21,13 @@ class Languages(Enum):
 
 
 class Models(Enum):
-    gpt4 = 'GPT-4 (Detailed)'
-    claude = 'Claude (Balanced)'
-    gemini = 'Gemini (Fast)'
+    mistral_latest__300 = 'mistral:latest__300'
+    gemma3n_e2b__300 = 'gemma3n:e2b__300'
+    llama3_1_latest__300 = 'llama3.1:latest__300'
+    mistral_latest__1000 = 'mistral:latest__1000'
+    gemma3n_e2b__1000 = 'gemma3n:e2b__1000'
+    llama3_1_latest__1000 = 'llama3.1:latest__1000'
+
+    @classmethod
+    def get_model_name_and_char(cls, model: Models):
+        return model.value.split('__')
