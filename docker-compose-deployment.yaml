@@ -11,6 +11,7 @@ services:
     restart: unless-stopped
 
   main-server:
+    container_name: main-server
     build:
       context: .
       dockerfile: ./Dockerfile
